@@ -1,8 +1,11 @@
+const path = require("path");
+const morgan = require("morgan");
+const colors = require("colors");
 const express = require("express");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config/config.env" });
-const colors = require("colors");
-const path = require("path");
+const connectDB = require("./config/db");
+connectDB();
 
 // Local routes
 const users = require("./rotues/auth");
@@ -16,6 +19,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")));
+
+// Dev loggin middleware
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 // Mount routers
 app.use("/api/v1/auth", users);
