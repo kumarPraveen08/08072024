@@ -5,6 +5,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config/config.env" });
 const connectDB = require("./config/db");
+const errorHandler = require("./middleware/errorHandler");
 connectDB();
 
 // Local routes
@@ -27,6 +28,7 @@ if (process.env.NODE_ENV === "development") {
 
 // Mount routers
 app.use("/api/v1/auth", users);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(
@@ -36,3 +38,10 @@ const server = app.listen(
       .yellow.bold
   )
 );
+
+// Handle undefined promise rejections
+process.on("unhandledRejection", (err, promise) => {
+  console.log(`Error: ${err.message}`.red);
+  // close server and exit process
+  server.close(() => process.exit(1));
+});
