@@ -7,7 +7,9 @@ const connectDB = async () => {
       `MongoDB Connected on host: ${conn.connection.host}`.magenta.bold
     );
   } catch (error) {
-    console.log(`[DATABASE] Something went wrong`.red.bold.underline.inverse);
+    console.log(
+      `Error Establishing a Database Connection`.red.bold.underline.inverse
+    );
   }
 };
 

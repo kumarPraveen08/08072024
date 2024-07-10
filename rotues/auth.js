@@ -7,13 +7,15 @@ const {
   getUser,
 } = require("../controllers/authController");
 
+const { protect } = require("../middleware/authHandler");
+
 const router = express.Router();
 
 router.post("/register", register);
 router.post("/login", login);
-router.get("/me", getMe);
-router.get("/users", getUsers);
-router.get("/users/:id", getUser);
+router.get("/me", protect, getMe);
+router.get("/users", protect, getUsers);
+router.route("/users/:id").get(protect, getUser);
 // router.post("/verify/:email", getMe);
 
 module.exports = router;

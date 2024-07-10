@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./config/config.env" });
 const connectDB = require("./config/db");
 const errorHandler = require("./middleware/errorHandler");
+const cookieParser = require("cookie-parser");
 connectDB();
 
 // Local routes
@@ -17,6 +18,9 @@ const app = express();
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Cookie parser
+app.use(cookieParser());
 
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")));
