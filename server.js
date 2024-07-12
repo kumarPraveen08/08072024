@@ -10,7 +10,8 @@ const cookieParser = require("cookie-parser");
 connectDB();
 
 // Local routes
-const users = require("./rotues/auth");
+const auth = require("./rotues/auth");
+const users = require("./rotues/users");
 
 // App
 const app = express();
@@ -31,7 +32,8 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // Mount routers
-app.use("/api/v1/auth", users);
+app.use("/api/v1/auth", auth);
+app.use("/api/v1/users", users);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
