@@ -14,6 +14,7 @@ connectDB();
 const auth = require("./rotues/auth");
 const users = require("./rotues/users");
 const stores = require("./rotues/stores");
+const categories = require("./rotues/categories");
 
 // App
 const app = express();
@@ -40,6 +41,7 @@ app.use(fileUpload());
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/users", users);
 app.use("/api/v1/stores", stores);
+app.use("/api/v1/categories", categories);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;

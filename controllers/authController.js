@@ -95,6 +95,29 @@ exports.getMe = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: user });
 });
 
+// @desc        Update profile details by Id
+// @route       PUT /api/v1/users/:id
+// @access      Private
+exports.updateDetails = asyncHandler(async (req, res, next) => {
+  // Get user by id
+  let user = await User.findById(req.params.id);
+
+  // Make sure user exists
+  if (!user)
+    return next(
+      new ErrorResponse(`Resource Not Found With ID of ${req.params.id}`, 404)
+    );
+
+  // Update user
+  user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  // response
+  res.status(200).json({ success: true, data: user });
+});
+
 // @desc        Forget Password
 // @route       POST /api/v1/auth/forget-password
 // @access      Public

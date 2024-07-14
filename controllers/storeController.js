@@ -35,7 +35,7 @@ exports.createStore = asyncHandler(async (req, res, next) => {
   const { name, is_searchable, search_url, search_seperator, domain } =
     req.body;
 
-  // Create a new user in the database
+  // Create a new store in the database
   let store = await Store.create({
     name,
     is_searchable,
@@ -75,25 +75,21 @@ exports.updateStore = asyncHandler(async (req, res, next) => {
 // @route       DELETE /api/v1/stores/:id
 // @access      Private
 exports.deleteStore = asyncHandler(async (req, res, next) => {
-  try {
-    // Get store by id
-    let store = await Store.findById(req.params.id);
+  // Get store by id
+  let store = await Store.findById(req.params.id);
 
-    // Make sure store exists
-    if (!store) {
-      return next(
-        new ErrorResponse(`Resource Not Found With ID of ${req.params.id}`, 404)
-      );
-    }
-
-    // Remove store
-    await store.deleteOne();
-
-    // Respond with 204 No Content after successful deletion
-    res.status(200).json({ success: true, data: {} });
-  } catch (error) {
-    console.log("problem");
+  // Make sure store exists
+  if (!store) {
+    return next(
+      new ErrorResponse(`Resource Not Found With ID of ${req.params.id}`, 404)
+    );
   }
+
+  // Remove store
+  await store.deleteOne();
+
+  // Respond with 204 No Content after successful deletion
+  res.status(200).json({ success: true, data: {} });
 });
 
 // @desc        Upload photo for store
