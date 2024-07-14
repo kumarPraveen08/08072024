@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const crypto = require('node:crypto');
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -76,7 +76,6 @@ UserSchema.methods.matchPassword = async function (enteredPassword) {
     this.forgotToken = crypto.createHash('sha256').update(resetToken).digest("hex");
     this.forgotTokenExpire = Date.now() + 3600000; // 1 hour
 
-    console.log(resetToken);
     return resetToken;
   };
 
