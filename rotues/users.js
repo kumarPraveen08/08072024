@@ -1,5 +1,4 @@
 const express = require("express");
-const { register, login, getMe } = require("../controllers/authController");
 
 const { protect } = require("../middleware/authHandler");
 const {
@@ -10,9 +9,12 @@ const {
   deleteUser,
 } = require("../controllers/userController");
 
+const advancedResults = require("../middleware/advancedResults");
+const User = require("../models/UserModel");
+
 const router = express.Router();
 
-router.route("/").get(getUsers).post(createUser);
+router.route("/").get(advancedResults(User), getUsers).post(createUser);
 router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
 
 module.exports = router;

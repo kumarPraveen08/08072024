@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Amazon",
+        "slug": "amazon-in",
+        "prime_image": "https://cdn.pricehistory.in/media/store/Amazon-Prime.png",
+        "image": "https://cdn.pricehistory.in/media/store/amazon.png",
+        "is_searchable": true,
+        "search_url": "https://www.amazon.in/s?k=",
+        "search_seperator": "+",
+        "domain": "amazon.com"
+    },
+    {
+        "name": "Flipkart",
+        "slug": "flipkart-com",
+        "prime_image": "https://cdn.pricehistory.in/media/store/fa_62673a.png",
+        "image": "https://cdn.pricehistory.in/media/store/flipkart.png",
+        "is_searchable": true,
+        "search_url": "https://www.flipkart.com/search?q=",
+        "search_seperator": "%20",
+        "domain": "flipkart.com"
+    },
+    {
+        "name": "Croma",
+        "slug": "croma-com",
+        "prime_image": null,
+        "image": "https://cdn.pricehistory.in/media/store/5323F2AF-95AF-475F-B3FC-9D6F76B79616.png",
+        "is_searchable": true,
+        "search_url": "https://www.croma.com/search/?text=",
+        "search_seperator": "%20",
+        "domain": "croma.com"
+    }
+]

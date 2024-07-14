@@ -2,6 +2,7 @@ const path = require("path");
 const morgan = require("morgan");
 const colors = require("colors");
 const express = require("express");
+const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config/config.env" });
 const connectDB = require("./config/db");
@@ -12,6 +13,7 @@ connectDB();
 // Local routes
 const auth = require("./rotues/auth");
 const users = require("./rotues/users");
+const stores = require("./rotues/stores");
 
 // App
 const app = express();
@@ -31,9 +33,13 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
+// Express fileupload
+app.use(fileUpload());
+
 // Mount routers
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/users", users);
+app.use("/api/v1/stores", stores);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
