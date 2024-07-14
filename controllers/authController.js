@@ -11,11 +11,28 @@ exports.register = asyncHandler(async (req, res, next) => {
   // Filter request body needed data
   const { name, email, password } = req.body;
 
+  const resetToken = crypto.randomBytes(20).toString("hex");
+  emailToken = crypto.createHash('sha256').update(resetToken).digest("hex");
+  emailTokenExpire = Date.now() + 3600000;
+  
+  
   // Create new user
-  const user = await User.create({ name, email, password });
+  const user = await User.create({ name, email, password, emailToken, emailTokenExpire });
 
   // Create token
   const token = user.getSignedJwtToken();
+
+  // Send email
+  const verifyUrl = `${req.protocol}://${req.get('host')}/api/v1/verify-account/${emailToken}`;
+  const message = `Thank you for signing up with us! To complete your registration, please verify your email address by clicking the link below:  \n\n<a href="${verifyUrl}" target="_blank">${verifyUrl}</a>\n\nThis link will expire in 1 hour.`;
+
+  await sendEmail({
+    email: email,
+    subject: "Verify Your Account",
+    message
+  });
+  // response
+
 
   // response
   res.status(200).json({ success: true, token });
@@ -65,7 +82,7 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 
 
 // @desc        Forget Password
-// @route       POST /api/v1/auth/forgetPassword
+// @route       POST /api/v1/auth/forget-password
 // @access      Public
 
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
@@ -83,7 +100,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   // Send email with reset token
   const resetUrl = `${req.protocol}://${req.get(
     "host"
-  )}/api/v1/auth/resetPassword/${resetToken}`;
+  )}/api/v1/auth/reset-password/${resetToken}`;
   const message = `You are receiving this email because you (or someone else) has requested a password reset. Please click on the following link to complete the process: \n\n${resetUrl}\n\nIf you did not request a password reset, please ignore this email and your password will remain unchanged.`;
 
   try{
@@ -93,7 +110,6 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
       message
     });
 
-    res.status(200).json({ success: true, message: "Email sent" });
   }catch(error){
     console.error("Error sending email", error);
 
@@ -108,7 +124,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 });
 
 // @desc        Reset Password
-// @route       POST /api/v1/auth/resetPassword/:resettoken
+// @route       PUT /api/v1/auth/reset-password/:resettoken
 // @access      Public
 
 exports.resetPassword = asyncHandler(async (req, res, next) => {
@@ -140,6 +156,48 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     await sendEmail( {
       email: user.email,
       subject: "Password Reset Successful",
+      message: welcomeEmail
+    });
+
+    }catch(error){
+    console.error("Error sending welcome email", error);
+    return next(new ErrorResponse("Error sending welcome email", 500));
+  }
+  sendTokenResponse(user, 200, res);
+});
+
+// @desc        User Account Verification
+// @route       PUT /api/v1/auth/verify-account/:resettoken
+// @access      Public
+
+exports.verifyEmail = asyncHandler(async (req, res, next) => {
+  // Get user via reset token
+  const verifyToken = crypto
+   .createHash("sha256")
+   .update(req.params.token)
+   .digest("hex");
+
+
+  const user = await User.findOne({
+    emailToken : req.params.token,
+    emailTokenExpire: { $gt: Date.now() },
+  });
+  console.log(req.params.token);
+  if (!user) {
+    return next(new ErrorResponse("Invalid token or token expired", 400));
+  }
+
+  // Set new password
+  user.is_verified = true;
+  await user.save();
+
+  // Send welcome email
+  const welcomeEmail = `Welcome to PriceTracker, ${user.name}! Your account has been successfully verified. You can now log in using your new password.`;
+
+  try{
+    await sendEmail( {
+      email: user.email,
+      subject: "Account Verified Successful",
       message: welcomeEmail
     });
 
