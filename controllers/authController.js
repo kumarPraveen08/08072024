@@ -83,3 +83,23 @@ const sendTokenResponse = (user, statusCode, res) => {
     .cookie("token", token, options)
     .json({ success: true, token });
 };
+
+// @desc        Forget Password
+// @route       POST /api/v1/auth/forgetPassword
+// @access      Public
+
+exports.forgotPassword = asyncHandler(async (req, res, next) => {
+  // Get user via id
+  const user = await User.findOne({email : req.body.email});
+  if (!user) {
+    return next(new ErrorResponse("User not found", 404));
+  }
+  // Generate reset token
+  const resetToken = user.getResetPasswordToken();
+
+  // Save reset token to user
+  //await user.save({ resetToken });
+  await user.save({ validateBeforesave : false });
+
+  res.status(200).json({ success: true, data: user });
+});
