@@ -58,6 +58,6 @@ exports.updateCountry = asyncHandler(async (req, res, next) => {
     if (!country) {
       return next(new ErrorResponse(`Country not found with id ${req.params.id}`, 404));
     }
-    await country.remove();
+    await country.deleteOne();
     res.status(200).json({ success: true, message: "Country deleted" });
     });

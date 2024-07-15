@@ -1,22 +1,15 @@
 const mongoose = require('mongoose');
 
 const CountrySchema = new mongoose.Schema({
-    id: {
-      type: String, 
-      required: true,
-      unique: true
-    },
+    
     symbol: {
       type: String,
-      required: true
     },
     code: {
       type: String,
-      required: true
     },
     lang: {
       type: String,
-      required: true
     },
     name: {
       type: String,
@@ -25,4 +18,5 @@ const CountrySchema = new mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model('Store', CountrySchema);
+
+module.exports = mongoose.model('Country', CountrySchema);

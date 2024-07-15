@@ -9,6 +9,7 @@ dotenv.config({ path: "./config/config.env" });
 // Load Models
 const User = require("./models/UserModel");
 const Store = require("./models/StoreModel");
+const Country = require("./models/CountryModel");
 
 // Connect to database
 mongoose.set("strictQuery", false);
@@ -22,12 +23,16 @@ const users = JSON.parse(
 const stores = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/stores.json`, "utf-8")
 );
+const countries = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/countries.json`, "utf-8")
+);
 
 // Import to DB
 const importData = async () => {
   try {
     await User.create(users);
     await Store.create(stores);
+    await Country.create(countries);
     console.log("Data Imported...".green.inverse);
     process.exit();
   } catch (err) {
@@ -40,6 +45,7 @@ const deleteData = async () => {
   try {
     await User.deleteMany();
     await Store.deleteMany();
+    await Country.deleteMany();
     console.log("Data Destroyed...".red.inverse);
     process.exit();
   } catch (err) {

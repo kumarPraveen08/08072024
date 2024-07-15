@@ -1,12 +1,12 @@
 [
     {
-        "symbal" :"₹",
+        "symbol" :"₹",
         "code" :"IN",
         "lang" :"EN_US",
         "name" :"India"
     },
     {
-        "symbal" :"$",
+        "symbol" :"$",
         "code" :"US",
         "lang" :"EN_US",
         "name" :"United States"
