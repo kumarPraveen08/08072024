@@ -128,6 +128,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 // @access      Public
 
 exports.resetPassword = asyncHandler(async (req, res, next) => {
+
   // Get user via reset token
   const resetPasswordToken = crypto
    .createHash("sha256")
@@ -171,13 +172,8 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 // @access      Public
 
 exports.verifyEmail = asyncHandler(async (req, res, next) => {
+  
   // Get user via reset token
-  const verifyToken = crypto
-   .createHash("sha256")
-   .update(req.params.token)
-   .digest("hex");
-
-
   const user = await User.findOne({
     emailToken : req.params.token,
     emailTokenExpire: { $gt: Date.now() },

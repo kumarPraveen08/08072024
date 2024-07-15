@@ -1,0 +1,14 @@
+[
+    {
+        "symbal" :"₹",
+        "code" :"IN",
+        "lang" :"EN_US",
+        "name" :"India"
+    },
+    {
+        "symbal" :"$",
+        "code" :"US",
+        "lang" :"EN_US",
+        "name" :"United States"
+    }
+]
