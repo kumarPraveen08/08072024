@@ -1,6 +1,45 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
 
+const HistorySchema = new mongoose.Schema({
+  pid: {
+    type: String,
+    required: true,
+  },
+  history: {
+    type: Map,
+    of: Number,
+    required: true,
+    default: {},
+  },
+  price_fetched_at: {
+    type: Date,
+    required: true,
+  },
+  lowest_price: {
+    type: Number,
+    required: true,
+  },
+  highest_price: {
+    type: Number,
+    required: true,
+  },
+  average_price: {
+    type: Number,
+    required: true,
+  },
+  in_stock: {
+    type: Boolean,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+});
+
+const History = mongoose.model("History", HistorySchema);
+
 const ProductSchema = new mongoose.Schema(
   {
     store: {
